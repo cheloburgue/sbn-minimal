@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBN — joyas de todos los días</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #F5F0E8;
+    --surface:  #FFFFFF;
+    --ink:      #1A1713;
+    --ink-mid:  #5C5449;
+    --ink-lt:   #A39B90;
+    --accent:   #B07D4A;
+    --accent-lt:#EFE0CC;
+    --border:   #D9D1C4;
+    --wa:       #25D366;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--ink);
+    height: 56px;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-sbn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem;
+    letter-spacing: 0.18em;
+    color: var(--bg);
+  }
+  .cart-btn {
+    background: none;
+    border: 1px solid rgba(245,240,232,0.3);
+    color: var(--bg);
+    padding: 0.4rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: border-color 0.18s, background 0.18s;
+  }
+  .cart-btn:hover { border-color: var(--bg); background: rgba(245,240,232,0.08); }
+  .cart-pill {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 999px;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    padding: 4rem 2.5rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'SBN';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(12rem, 35vw, 22rem);
+    letter-spacing: 0.08em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(245,240,232,0.06);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .hero-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(6rem, 20vw, 13rem);
+    letter-spacing: 0.14em;
+    color: var(--bg);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-divider {
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+    margin: 1.2rem auto 1.4rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1rem, 2.8vw, 1.45rem);
+    color: var(--accent-lt);
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.8rem;
+  }
+  .hero-cats {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-lt);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── SHEET NOTICE ─── */
+  .sheet-notice {
+    max-width: 1060px;
+    margin: 1.4rem auto 0;
+    padding: 0 2.5rem;
+    font-size: 0.72rem;
+    color: var(--ink-lt);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .sheet-notice a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-lt); }
+
+  /* ─── FILTERS ─── */
+  .filters {
+    max-width: 1060px;
+    margin: 2rem auto 0;
+    padding: 0 2.5rem 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0.35rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 999px;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  /* ─── GRID ─── */
+  .products-grid {
+    max-width: 1060px;
+    margin: 2.5rem auto 5rem;
+    padding: 0 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.4rem;
+  }
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    animation: fadeUp 0.38s ease both;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .product-card:hover {
+    box-shadow: 0 8px 30px rgba(26,23,19,0.1);
+    transform: translateY(-3px);
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .product-img {
+    aspect-ratio: 1;
+    background: var(--accent-lt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+  }
+  .product-badge {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--accent);
+    color: white;
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.65rem;
+    text-transform: uppercase;
+  }
+  .product-info { padding: 1rem 1.1rem 1.2rem; }
+  .product-category {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .product-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+  .product-desc {
+    font-size: 0.73rem;
+    color: var(--ink-lt);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+  .product-price sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 300;
+    color: var(--ink-lt);
+    vertical-align: baseline;
+    margin-left: 2px;
+  }
+  .add-btn {
+    width: 32px; height: 32px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.18s;
+    border-radius: 50%;
+  }
+  .add-btn:hover { background: var(--accent); }
+  .add-btn.added { background: var(--accent); font-size: 0.9rem; }
+
+  /* ─── CART DRAWER ─── */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,23,19,0.5);
+    z-index: 200;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .cart-overlay.open { opacity:1; pointer-events:all; }
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(420px, 100vw);
+    height: 100vh;
+    background: var(--surface);
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border);
+  }
+  .cart-drawer.open { transform: translateX(0); }
+  .cart-header {
+    padding: 1.2rem 1.5rem;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cart-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--bg);
+  }
+  .close-btn {
+    background: none; border: none;
+    font-size: 1rem;
+    color: var(--ink-lt);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .close-btn:hover { color: var(--bg); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 0.5rem 1.5rem; background: var(--bg); }
+  .cart-empty { padding: 3.5rem 0; text-align: center; color: var(--ink-lt); font-size: 0.8rem; }
+  .empty-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+  .cart-item {
+    display: flex; gap: 0.9rem;
+    padding: 1rem 0; border-bottom: 1px solid var(--border);
+    align-items: center; animation: fadeUp 0.22s ease;
+  }
+  .ci-thumb {
+    width: 50px; height: 50px;
+    background: var(--accent-lt);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+  }
+  .ci-info { flex: 1; min-width: 0; }
+  .ci-name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ci-price { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--ink-mid); margin-top: 3px; }
+  .ci-controls { display: flex; align-items: center; gap: 0.4rem; }
+  .qty-btn {
+    background: var(--border); border: none;
+    width: 22px; height: 22px; font-size: 0.85rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; transition: background 0.15s;
+  }
+  .qty-btn:hover { background: var(--accent-lt); }
+  .qty-num { font-size: 0.8rem; font-weight: 500; min-width: 16px; text-align: center; }
+  .rm-btn { background: none; border: none; color: var(--ink-lt); cursor: pointer; font-size: 0.8rem; transition: color 0.15s; margin-left: 2px; }
+  .rm-btn:hover { color: var(--ink); }
+  .cart-footer { padding: 1.3rem 1.5rem; border-top: 1px solid var(--border); background: var(--surface); }
+  .cart-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+  .ct-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-lt); }
+  .ct-amount { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--ink); }
+  .cart-note {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    padding: 0.65rem 0.8rem; font-family: 'Inter', sans-serif; font-size: 0.78rem;
+    color: var(--ink); resize: none; outline: none; margin-bottom: 1rem;
+    transition: border-color 0.15s; line-height: 1.5;
+  }
+  .cart-note:focus { border-color: var(--accent); }
+  .wa-btn {
+    width: 100%; background: var(--wa); color: white; border: none;
+    padding: 0.9rem; font-family: 'Inter', sans-serif; font-size: 0.78rem;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 0.6rem; transition: opacity 0.18s;
+  }
+  .wa-btn:hover:not(:disabled) { opacity: 0.88; }
+  .wa-btn:disabled { background: var(--border); color: var(--ink-lt); cursor: not-allowed; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; letter-spacing: 0.22em; color: var(--bg); }
+  .footer-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.9rem; color: var(--ink-lt); letter-spacing: 0.08em; }
+  .footer-copy { font-size: 0.62rem; letter-spacing: 0.14em; color: var(--ink-mid); text-transform: uppercase; margin-top: 0.5rem; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 1.8rem; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--ink); color: var(--bg);
+    padding: 0.6rem 1.5rem; font-size: 0.76rem; letter-spacing: 0.06em;
+    z-index: 999; transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+    pointer-events: none; white-space: nowrap;
+    border-left: 3px solid var(--accent);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    header, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .hero { padding: 3rem 1.2rem 4rem; }
+    .filters, .products-grid, .sheet-notice { padding-left: 1.2rem; padding-right: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo-sbn">SBN</span>
+  <button class="cart-btn" onclick="toggleCart()">
+    Carrito <span class="cart-pill" id="cartCount">0</span>
+  </button>
+</header>
+
+<div class="hero">
+  <div class="hero-brand">SBN</div>
+  <div class="hero-divider"></div>
+  <div class="hero-tagline">joyas de todos los días</div>
+  <div class="hero-cats">aritos &nbsp;·&nbsp; pulseras &nbsp;·&nbsp; anillos &nbsp;·&nbsp; cadenitas &nbsp;·&nbsp; carteras</div>
+</div>
+
+<div class="sheet-notice">
+  ✏️ Catálogo desde <a href="#" id="sheetLink">Google Sheets</a> &mdash; <span id="sheetStatus">cargando…</span>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="products-grid" id="productsGrid"></div>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Tu Carrito</span>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="ct-label">Total</span>
+      <span class="ct-amount" id="cartTotal">$0</span>
+    </div>
+    <textarea class="cart-note" id="cartNote" rows="2" placeholder="Nota (talle, color, consulta…)"></textarea>
+    <button class="wa-btn" id="sendBtn" onclick="sendToWhatsApp()" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-brand">SBN</div>
+  <div class="footer-tag">joyas de todos los días</div>
+  <div class="footer-copy">pedidos por whatsapp · Buenos Aires</div>
+</footer>
+
+<script>
+const CONFIG = { whatsapp:"5491158237678", sheetURL:"", currency:"$", currencyName:"ARS" };
+
+const SAMPLE_PRODUCTS = [
+  { id:1,  name:"Aritos Luna",           category:"Aritos",    price:2800,  emoji:"🌙", desc:"Colgantes con forma de luna, baño en oro.", badge:"Nuevo" },
+  { id:2,  name:"Aritos Perla Barroca",  category:"Aritos",    price:3200,  emoji:"🫧", desc:"Perla de río montada en aro plateado." },
+  { id:3,  name:"Aritos Estrella",       category:"Aritos",    price:2400,  emoji:"⭐", desc:"Estrellitas de acero inoxidable, hipoalergénicas." },
+  { id:4,  name:"Pulsera Dorada",        category:"Pulseras",  price:3600,  emoji:"✨", desc:"Ajustable con eslabones bañados en oro.", badge:"Top" },
+  { id:5,  name:"Pulsera Charm Flor",    category:"Pulseras",  price:2900,  emoji:"🌸", desc:"Con dije de flor de plata." },
+  { id:6,  name:"Pulsera Tejida",        category:"Pulseras",  price:1800,  emoji:"🧵", desc:"Tejida a mano con hilo encerado y dije dorado." },
+  { id:7,  name:"Anillo Solitario",      category:"Anillos",   price:4200,  emoji:"💍", desc:"Piedra de circón blanco en base de plata 925." },
+  { id:8,  name:"Anillo Serpiente",      category:"Anillos",   price:3800,  emoji:"🐍", desc:"Diseño serpiente bañado en oro.", badge:"Exclusivo" },
+  { id:9,  name:"Set Midi x3",           category:"Anillos",   price:2600,  emoji:"💫", desc:"Tres anillos delicados para apilar." },
+  { id:10, name:"Choker Perlas",         category:"Cadenitas", price:3100,  emoji:"📿", desc:"Choker de perlas sintéticas, cierre de presión." },
+  { id:11, name:"Cadenita Fina Oro",     category:"Cadenitas", price:4500,  emoji:"🔗", desc:"45cm, eslabón cardano bañado en oro 18k.", badge:"Top" },
+  { id:12, name:"Cadenita Con Dije",     category:"Cadenitas", price:3400,  emoji:"🌟", desc:"40cm con dije de corazón flotante." },
+  { id:13, name:"Cartera Nácar",         category:"Carteras",  price:12500, emoji:"👜", desc:"Minibag de nácar con cadena dorada." },
+  { id:14, name:"Cartera Wicker",        category:"Carteras",  price:9800,  emoji:"🧺", desc:"Estilo wicker, forro de seda y cierre magnético.", badge:"Nuevo" },
+  { id:15, name:"Cartera Bordada",       category:"Carteras",  price:11200, emoji:"🌺", desc:"Bordado floral artesanal, tamaño clutch." },
+];
+
+let products=[], cart=JSON.parse(localStorage.getItem('sbn_cart')||'[]'), activeFilter='todos';
+
+async function init() {
+  if (CONFIG.sheetURL) {
+    try { products=await loadFromSheet(CONFIG.sheetURL); document.getElementById('sheetStatus').textContent=`${products.length} productos ✓`; }
+    catch(e) { products=SAMPLE_PRODUCTS; document.getElementById('sheetStatus').textContent='error en planilla, usando ejemplos'; }
+  } else { products=SAMPLE_PRODUCTS; document.getElementById('sheetStatus').textContent='productos de ejemplo · configurá la planilla'; }
+  renderFilters(); renderProducts(); renderCart();
+}
+
+async function loadFromSheet(url) {
+  const text=await(await fetch(url)).text();
+  return text.trim().split('\n').slice(1).map((row,i)=>{
+    const [id,name,category,price,emoji,desc,badge]=row.split(',').map(s=>s.trim().replace(/^"|"$/g,''));
+    return {id:id||i,name,category,price:Number(price),emoji:emoji||'✨',desc:desc||'',badge:badge||''};
+  }).filter(p=>p.name);
+}
+
+function renderFilters() {
+  const cats=['todos',...new Set(products.map(p=>p.category))];
+  document.getElementById('filters').innerHTML=cats.map(c=>`<button class="filter-btn ${c===activeFilter?'active':''}" onclick="filterProducts('${c}',this)">${c==='todos'?'Todos':c}</button>`).join('');
+}
+
+function filterProducts(cat,btn) {
+  activeFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderProducts();
+}
+
+function renderProducts() {
+  const list=activeFilter==='todos'?products:products.filter(p=>p.category===activeFilter);
+  const grid=document.getElementById('productsGrid');
+  if(!list.length){grid.innerHTML='<p style="padding:2rem;color:var(--ink-lt);font-size:0.8rem;">Sin productos.</p>';return;}
+  grid.innerHTML=list.map((p,i)=>{
+    const inCart=cart.some(c=>c.id==p.id);
+    return `<div class="product-card" style="animation-delay:${i*0.04}s">
+      <div class="product-img"><span>${p.emoji}</span>${p.badge?`<span class="product-badge">${p.badge}</span>`:''}</div>
+      <div class="product-info">
+        <div class="product-category">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">$${p.price.toLocaleString('es-AR')} <sub>ARS</sub></div>
+          <button class="add-btn ${inCart?'added':''}" onclick="addToCart(${p.id})">${inCart?'✓':'+'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(id) {
+  const p=products.find(x=>x.id==id), ex=cart.find(c=>c.id==id);
+  if(ex) ex.qty++; else cart.push({...p,qty:1});
+  saveCart(); renderCart(); renderProducts(); showToast(`${p.emoji} ${p.name} agregado`);
+}
+function updateQty(id,d) {
+  const item=cart.find(c=>c.id==id); if(!item) return;
+  item.qty+=d; if(item.qty<=0) cart=cart.filter(c=>c.id!=id);
+  saveCart(); renderCart(); renderProducts();
+}
+function removeFromCart(id) { cart=cart.filter(c=>c.id!=id); saveCart(); renderCart(); renderProducts(); }
+
+function saveCart() {
+  localStorage.setItem('sbn_cart',JSON.stringify(cart));
+  document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0);
+}
+
+function renderCart() {
+  const count=cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartCount').textContent=count;
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  document.getElementById('cartTotal').textContent=`$${total.toLocaleString('es-AR')}`;
+  document.getElementById('sendBtn').disabled=!cart.length;
+  const el=document.getElementById('cartItems');
+  if(!cart.length){el.innerHTML=`<div class="cart-empty"><div class="empty-icon">🛍️</div><p>Tu carrito está vacío</p></div>`;return;}
+  el.innerHTML=cart.map(item=>`
+    <div class="cart-item">
+      <div class="ci-thumb">${item.emoji}</div>
+      <div class="ci-info"><div class="ci-name">${item.name}</div><div class="ci-price">$${(item.price*item.qty).toLocaleString('es-AR')}</div></div>
+      <div class="ci-controls">
+        <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="updateQty(${item.id},+1)">+</button>
+        <button class="rm-btn" onclick="removeFromCart(${item.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function sendToWhatsApp() {
+  if(!cart.length) return;
+  const note=document.getElementById('cartNote').value.trim();
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  let msg=`¡Hola SBN! Quiero hacer este pedido:\n\n`;
+  cart.forEach(i=>msg+=`• ${i.emoji} ${i.name} x${i.qty} — $${(i.price*i.qty).toLocaleString('es-AR')}\n`);
+  msg+=`\n*Total: $${total.toLocaleString('es-AR')} ARS*`;
+  if(note) msg+=`\n\nNota: ${note}`;
+  const a=document.createElement('a');
+  a.href=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+  a.target='_blank'; a.rel='noopener noreferrer';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function toggleCart() {
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.getElementById('cartDrawer').classList.toggle('open');
+}
+
+let toastT;
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+init();
+</script>
+</body>
+</html>
