@@ -274,7 +274,8 @@
     position: fixed;
     top: 0; right: 0;
     width: min(420px, 100vw);
-    height: 100vh;
+    height: 100%;
+    height: 100dvh;
     background: var(--surface);
     z-index: 201;
     transform: translateX(100%);
@@ -282,6 +283,7 @@
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border);
+    overflow: hidden;
   }
   .cart-drawer.open { transform: translateX(0); }
   .cart-header {
@@ -305,7 +307,7 @@
     transition: color 0.15s;
   }
   .close-btn:hover { color: var(--bg); }
-  .cart-items { flex: 1; overflow-y: auto; padding: 0.5rem 1.5rem; background: var(--bg); }
+  .cart-items { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.5rem 1.5rem; background: var(--bg); min-height: 0; }
   .cart-empty { padding: 3.5rem 0; text-align: center; color: var(--ink-lt); font-size: 0.8rem; }
   .empty-icon { font-size: 2rem; margin-bottom: 0.8rem; }
   .cart-item {
@@ -333,7 +335,7 @@
   .qty-num { font-size: 0.8rem; font-weight: 500; min-width: 16px; text-align: center; }
   .rm-btn { background: none; border: none; color: var(--ink-lt); cursor: pointer; font-size: 0.8rem; transition: color 0.15s; margin-left: 2px; }
   .rm-btn:hover { color: var(--ink); }
-  .cart-footer { padding: 1.3rem 1.5rem; border-top: 1px solid var(--border); background: var(--surface); }
+  .cart-footer { padding: 1.3rem 1.5rem; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; padding-bottom: max(1.3rem, env(safe-area-inset-bottom)); }
   .cart-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
   .ct-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-lt); }
   .ct-amount { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--ink); }
@@ -383,6 +385,17 @@
     header, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
     .hero { padding: 3rem 1.2rem 4rem; }
     .filters, .products-grid, .sheet-notice { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 3rem; }
+    .product-img { font-size: 2.5rem; }
+    .product-info { padding: 0.75rem 0.8rem 0.9rem; }
+    .product-name { font-size: 0.82rem; }
+    .product-price { font-size: 1rem; }
+    .cart-note { font-size: 0.85rem; }
+    .wa-btn { font-size: 0.82rem; padding: 1rem; }
+    .ci-controls { gap: 0.25rem; }
+  }
+  @media (max-width: 360px) {
+    .products-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
