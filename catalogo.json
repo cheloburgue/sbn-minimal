@@ -166,5 +166,17 @@
     "stock": 3,
     "photos": "",
     "longdesc": ""
+  },
+  {
+    "id": 16,
+    "name": "Campera Oxford",
+    "category": "Carteras",
+    "price": 150000,
+    "desc": "Campera Oxford bien abrigada",
+    "longdesc": "",
+    "badge": "Top",
+    "stock": 5,
+    "emoji": "✨",
+    "photos": ""
   }
 ]
