@@ -95,12 +95,16 @@ header{position:sticky;top:0;z-index:100;background:rgba(252,249,248,0.88);backd
 /* DETAIL */
 #view-detail{min-height:80vh;}
 .detail-wrap{max-width:1200px;margin:0 auto;padding:3rem 3rem 6rem;}
-.detail-breadcrumb{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-lt);margin-bottom:2.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.detail-breadcrumb{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-lt);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.btn-volver{display:inline-flex;align-items:center;gap:0.5rem;background:none;border:1px solid var(--border);color:var(--ink-mid);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.45rem 1rem;cursor:pointer;transition:all 0.2s;margin-bottom:1.5rem;}
+.btn-volver:hover{border-color:var(--ink);color:var(--ink);}
 .detail-breadcrumb a{color:var(--accent);text-decoration:none;cursor:pointer;}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
 .detail-gallery{position:sticky;top:90px;}
-.gallery-main{aspect-ratio:1;overflow:hidden;background:var(--bg-low);margin-bottom:0.8rem;}
-.gallery-main img{width:100%;height:100%;object-fit:contain;padding:1.5rem;display:block;}
+.gallery-main{aspect-ratio:1;overflow:hidden;background:var(--bg-low);margin-bottom:0.8rem;position:relative;cursor:zoom-in;}
+.gallery-main img{width:100%;height:100%;object-fit:contain;padding:1.5rem;display:block;transition:transform 0.3s ease;transform-origin:center center;}
+.gallery-main.zoomed{cursor:zoom-out;}
+.gallery-main.zoomed img{transform:scale(2);}
 .gallery-main-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--accent-lt);}
 .gallery-main-placeholder span{font-family:'Manrope',sans-serif;font-weight:200;font-size:1.5rem;letter-spacing:0.1em;color:var(--accent);}
 .gallery-thumbs{display:flex;gap:0.5rem;flex-wrap:wrap;}
@@ -154,20 +158,20 @@ header{position:sticky;top:0;z-index:100;background:rgba(252,249,248,0.88);backd
 .qty-btn:hover{color:var(--ink);}
 .qty-num{font-size:0.8rem;min-width:28px;text-align:center;font-weight:500;}
 .ci-price{font-family:'Manrope',sans-serif;font-size:1rem;font-weight:300;color:var(--ink);}
-.cart-summary{padding:1.5rem 2.5rem;background:var(--bg-low);flex-shrink:0;padding-bottom:max(1.5rem,env(safe-area-inset-bottom));}
-.summary-rows{margin-bottom:1.2rem;}
+.cart-summary{padding:1rem 2.5rem;background:var(--bg-low);flex-shrink:0;padding-bottom:max(1rem,env(safe-area-inset-bottom));}
+.summary-rows{margin-bottom:0.6rem;}
 .summary-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;}
 .summary-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-mid);}
 .summary-val{font-family:'Manrope',sans-serif;font-size:0.9rem;font-weight:300;}
-.summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0 1.2rem;border-top:1px solid var(--border);margin-top:0.5rem;}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:0.6rem 0 0.8rem;border-top:1px solid var(--border);margin-top:0.3rem;}
 .total-label{font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;}
 .total-amount{font-family:'Manrope',sans-serif;font-size:2rem;font-weight:200;}
-.cart-note{width:100%;background:var(--surface);border:1px solid var(--border);padding:0.75rem 0.9rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;color:var(--ink);resize:none;outline:none;margin-bottom:1rem;transition:border-color 0.15s;line-height:1.5;}
+.cart-note{width:100%;background:var(--surface);border:1px solid var(--border);padding:0.5rem 0.9rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;color:var(--ink);resize:none;outline:none;margin-bottom:0.6rem;transition:border-color 0.15s;line-height:1.5;}
 .cart-note:focus{border-color:var(--accent);}
 .wa-btn{width:100%;background:var(--wa);color:#fff;border:none;padding:1rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.6rem;transition:opacity 0.2s;}
 .wa-btn:hover:not(:disabled){opacity:0.88;}
 .wa-btn:disabled{background:var(--outline);cursor:not-allowed;}
-.trust-row{display:flex;align-items:flex-start;gap:0.75rem;margin-top:1rem;}
+.trust-row{display:flex;align-items:flex-start;gap:0.75rem;margin-top:0.5rem;}
 .trust-icon{font-size:0.9rem;color:var(--accent);flex-shrink:0;margin-top:2px;}
 .trust-text h4{font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;margin-bottom:0.15rem;}
 .trust-text p{font-size:0.6rem;color:var(--ink-lt);line-height:1.5;}
@@ -258,7 +262,8 @@ footer{background:var(--ink);padding:4rem 3rem;}
 </div>
 <div id="view-detail"><div class="detail-wrap">
 <div class="detail-breadcrumb"><a onclick="showHome()">Inicio</a> &rsaquo; <a onclick="showHome()" id="detail-breadcrumb-cat"></a> &rsaquo; <span id="detail-breadcrumb-name"></span></div>
-<div class="detail-grid"><div class="detail-gallery"><div class="gallery-main" id="gallery-main"></div><div class="gallery-thumbs" id="gallery-thumbs"></div></div>
+<button class="btn-volver" onclick="volverAlCatalogo()">&#8592; Volver al cat&#225;logo</button>
+<div class="detail-grid"><div class="detail-gallery"><div class="gallery-main" id="gallery-main" onclick="toggleZoom(this)"></div><div class="gallery-thumbs" id="gallery-thumbs"></div></div>
 <div class="detail-info"><div class="detail-id" id="detail-id"></div><div class="detail-cat" id="detail-cat"></div><h1 class="detail-name" id="detail-name"></h1><div class="detail-color" id="detail-color"></div><div class="detail-price" id="detail-price"></div><div class="detail-divider"></div><div class="detail-desc" id="detail-desc"></div><div class="detail-stock" id="detail-stock"></div>
 <button class="detail-add-btn" id="detail-add-btn" onclick="addToCartFromDetail()">Agregar al carrito</button>
 <div class="detail-features"><div class="detail-feature"><span class="detail-feature-icon">&#10003;</span> Pedido confirmado por WhatsApp</div><div class="detail-feature"><span class="detail-feature-icon">&#128666;</span> Envios a todo el pais</div><div class="detail-feature"><span class="detail-feature-icon">&#128155;</span> Joyas de todos los dias</div></div>
@@ -360,6 +365,31 @@ function showDetail(id) {
   document.getElementById('view-detail').classList.add('active');
   window.scrollTo({top:0, behavior:'instant'});
   renderDetailPage(p);
+}
+function volverAlCatalogo() {
+  showHome();
+  setTimeout(() => {
+    const prod = document.getElementById('productos');
+    if (prod) prod.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 100);
+}
+function toggleZoom(el) {
+  el.classList.toggle('zoomed');
+  // On zoomed, track mouse to pan
+  if (el.classList.contains('zoomed')) {
+    el.addEventListener('mousemove', panZoom);
+  } else {
+    el.removeEventListener('mousemove', panZoom);
+    const img = el.querySelector('img');
+    if (img) img.style.transformOrigin = 'center center';
+  }
+}
+function panZoom(e) {
+  const img = this.querySelector('img'); if (!img) return;
+  const rect = this.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+  const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+  img.style.transformOrigin = x + '% ' + y + '%';
 }
 function renderDetailPage(p) {
   document.title = p.nombre_variante + ' - SBN';
@@ -523,6 +553,9 @@ function filterCategory(cat) {
   const btn = [...document.querySelectorAll('.filter-btn')].find(b => b.textContent === (cat==='todos'?'Todos':cat));
   if (btn) btn.classList.add('active');
   renderProducts();
+  // Scroll to products section
+  const prod = document.getElementById('productos');
+  if (prod) setTimeout(() => prod.scrollIntoView({behavior:'smooth', block:'start'}), 50);
 }
 
 // &#9472;&#9472; RENDER PRODUCTS &#9472;&#9472;
