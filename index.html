@@ -254,7 +254,7 @@ footer{background:var(--ink);padding:4rem 3rem;}
   <div class="hero-dots" id="heroDots"></div>
 </div>
 <div class="cats-section"><div class="section-eyebrow">Explorar por categoria</div><div class="cats-grid" id="catsGrid"></div></div>
-<div id="productos" class="products-section"><div class="section-header"><span class="section-title">Coleccion</span><span class="sheet-notice"><span id="sheetStatus">cargando...</span></span></div><div class="filters" id="filters"></div><div class="products-grid" id="productsGrid"><div class="loading-state">Cargando productos...</div></div></div>
+<div id="producto" class="products-section"><div class="section-header"><span class="section-title">Coleccion</span><span class="sheet-notice"><span id="sheetStatus">cargando...</span></span></div><div class="filters" id="filters"></div><div class="products-grid" id="productsGrid"><div class="loading-state">Cargando productos...</div></div></div>
 </div>
 <div id="view-detail"><div class="detail-wrap">
 <div class="detail-breadcrumb"><a onclick="showHome()">Inicio</a> &rsaquo; <a onclick="showHome()" id="detail-breadcrumb-cat"></a> &rsaquo; <span id="detail-breadcrumb-name"></span></div>
@@ -309,7 +309,7 @@ async function sbFetch(path, opts) {
 }
 
 async function loadProducts() {
-  const data = await sbFetch('productos?select=*&activo=eq.true&order=categoria,nombre_variante');
+  const data = await sbFetch('producto?select=*&activo=eq.true&order=categoria,nombre_variante');
   return data.map(p => ({
     ...p,
     precio_venta: Number(p.precio_venta) || 0,
@@ -457,7 +457,7 @@ function renderHero() {
       +'<div class="slide-eyebrow">Coleccion</div>'
       +'<h1 class="slide-title">'+p.categoria+'<br><em>para vos</em></h1>'
       +'<p class="slide-desc">Descubri nuestra seleccion de '+p.categoria.toLowerCase()+'.</p>'
-      +'<button class="slide-cta" onclick="filterCategory(\''+p.categoria+'\');document.getElementById(\'productos\').scrollIntoView({behavior:\'smooth\'})">Ver '+p.categoria+'</button>'
+      +'<button class="slide-cta" onclick="filterCategory(\''+p.categoria+'\');document.getElementById(\'producto\').scrollIntoView({behavior:\'smooth\'})">Ver '+p.categoria+'</button>'
       +'</div></div>';
   }).join('');
 
@@ -492,7 +492,7 @@ function renderCategories() {
     const imgHtml = photo
       ? '<img src="'+photo+'" alt="'+cat+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="cat-card-placeholder" style="display:none"><span>'+cat[0]+'</span></div>'
       : '<div class="cat-card-placeholder"><span>'+cat[0]+'</span></div>';
-    return '<div class="cat-card" onclick="filterCategory(\''+cat+'\');document.getElementById(\'productos\').scrollIntoView({behavior:\'smooth\'})">'
+    return '<div class="cat-card" onclick="filterCategory(\''+cat+'\');document.getElementById(\'producto\').scrollIntoView({behavior:\'smooth\'})">'
       + imgHtml
       + '<div class="cat-label">'+cat+'</div>'
       + '</div>';
@@ -670,7 +670,7 @@ document.addEventListener('keydown', e => {
 async function loadAdminTable() {
   showAdminStatus('Cargando...', 'info');
   try {
-    const data = await sbFetch('productos?select=*&order=categoria,nombre_variante');
+    const data = await sbFetch('producto?select=*&order=categoria,nombre_variante');
     renderAdminTable(data);
     showAdminStatus('', '');
   } catch(e) { showAdminStatus('Error: '+e.message, 'err'); }
@@ -730,7 +730,7 @@ async function saveRow(id) {
     updates[f] = v;
   });
   try {
-    await sbFetch('productos?id_producto=eq.'+encodeURIComponent(id), {
+    await sbFetch('producto?id_producto=eq.'+encodeURIComponent(id), {
       method: 'PATCH', body: JSON.stringify(updates), headers: {'Prefer':'return=minimal'}
     });
     showAdminStatus('Guardado correctamente', 'ok');
@@ -745,7 +745,7 @@ async function toggleActivo(id, btn) {
   const isOn = btn.classList.contains('on');
   btn.classList.toggle('on');
   try {
-    await sbFetch('productos?id_producto=eq.'+encodeURIComponent(id), {
+    await sbFetch('producto?id_producto=eq.'+encodeURIComponent(id), {
       method:'PATCH', body:JSON.stringify({activo:!isOn}), headers:{'Prefer':'return=minimal'}
     });
     showAdminStatus('Visibilidad actualizada', 'ok');
@@ -758,7 +758,7 @@ async function toggleActivo(id, btn) {
 async function deleteRow(id) {
   if (!confirm('Eliminar este producto?')) return;
   try {
-    await sbFetch('productos?id_producto=eq.'+encodeURIComponent(id), {method:'DELETE'});
+    await sbFetch('producto?id_producto=eq.'+encodeURIComponent(id), {method:'DELETE'});
     document.getElementById('arow-'+id)?.remove();
     products = await loadProducts();
     allCategories = [...new Set(products.map(p=>p.categoria).filter(Boolean))];
@@ -780,7 +780,7 @@ async function addNewProduct() {
     stock_disponible: (stock===''||stock===null)?null:Number(stock),
     descripcion_web:desc, link_imagenes:link, activo:true };
   try {
-    await sbFetch('productos', {method:'POST', body:JSON.stringify(row)});
+    await sbFetch('producto', {method:'POST', body:JSON.stringify(row)});
     showAdminStatus('Producto agregado', 'ok');
     loadAdminTable();
     products = await loadProducts();
