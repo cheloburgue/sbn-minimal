@@ -403,9 +403,9 @@ function addToCartFromDetail() { if (currentDetailProduct) addToCart(currentDeta
 
 // &#9472;&#9472; INIT &#9472;&#9472;
 async function init() {
-  // Clear cart items from old versions that don't have the right structure
-  cart = cart.filter(c => c.id_producto && c.nombre_variante && !isNaN(Number(c.precio_venta)));
-  saveCart();
+  // Wipe cart completely if it contains old-format items
+  const hasOldItems = cart.some(c => !c.id_producto || !c.nombre_variante);
+  if (hasOldItems) { cart = []; localStorage.removeItem('sbn_cart'); }
   const statusEl = document.getElementById('sheetStatus');
   statusEl.textContent = 'Cargando...';
   try {
@@ -567,11 +567,11 @@ function addToCart(id) {
   showToast(p.nombre_variante + ' agregado');
 }
 function updateQty(id, d) {
-  const item = cart.find(c => c.id_producto == id); if (!item) return;
+  const item = cart.find(c => String(c.id_producto) === String(id) || String(c.id) === String(id)); if (!item) return;
   item.qty += d; if (item.qty <= 0) cart = cart.filter(c => c.id_producto != id);
   saveCart(); renderCart(); renderProducts();
 }
-function removeFromCart(id) { cart = cart.filter(c => c.id_producto != id); saveCart(); renderCart(); renderProducts(); }
+function removeFromCart(id) { cart = cart.filter(c => String(c.id_producto) !== String(id) && String(c.id) !== String(id)); saveCart(); renderCart(); renderProducts(); }
 function saveCart() {
   localStorage.setItem('sbn_cart', JSON.stringify(cart));
   document.getElementById('cartCount').textContent = cart.reduce((s,c) => s+c.qty, 0);
