@@ -40,6 +40,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(252,249,248,0.88);backd
 .hero-dots{position:absolute;bottom:2rem;left:5rem;display:flex;gap:0.6rem;z-index:10;}
 .hero-dot{width:20px;height:2px;background:var(--outline);border:none;cursor:pointer;transition:all 0.25s;padding:0;}
 .hero-dot.active{width:40px;background:var(--accent);}
+.hero-dots-mobile{display:none;}
 
 /* CATEGORIES */
 .cats-section{max-width:1400px;margin:5rem auto 0;padding:0 3rem;}
@@ -242,7 +243,7 @@ footer{background:var(--ink);padding:4rem 3rem;}
 .admin-status-bar.info{color:#0c5460;background:#d1ecf1;border:1px solid #bee5eb;}
 
 @media(max-width:1024px){.products-grid{grid-template-columns:repeat(3,1fr);}.product-card:nth-child(2),.product-card:nth-child(6),.product-card:nth-child(10),.product-card:nth-child(14){margin-top:0;}.product-card:nth-child(2),.product-card:nth-child(5),.product-card:nth-child(8),.product-card:nth-child(11),.product-card:nth-child(14){margin-top:4rem;}.detail-grid{grid-template-columns:1fr;gap:2.5rem;}.detail-gallery{position:static;}}
-@media(max-width:768px){header{padding:0 1.2rem;}.header-nav{display:none;}.hero{height:72vw;min-height:320px;max-height:420px;}.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;}.slide-img-wrap{position:absolute;top:0;left:0;right:0;height:62%;opacity:1;}.slide-img-wrap img{object-position:center center;}.slide-overlay{background:linear-gradient(180deg,rgba(252,249,248,0) 0%,rgba(252,249,248,0.6) 45%,rgba(252,249,248,0.99) 70%);}.hero .slide-content{padding:0.8rem 1.5rem 2.2rem;position:relative;z-index:2;width:100%;}.slide-title{font-size:1.6rem;margin-bottom:0.4rem;line-height:1.1;}.slide-desc{display:none;}.slide-eyebrow{margin-bottom:0.3rem;font-size:0.58rem;}.slide-cta{padding:0.65rem 1.4rem;font-size:0.6rem;margin-bottom:0;}.hero-dots{left:50%;transform:translateX(-50%);bottom:0.6rem;top:auto;z-index:11;}.cats-section,.products-section{padding:0 1.2rem;}.cats-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem;}.products-grid{grid-template-columns:repeat(2,1fr);gap:0 1rem;}.product-card:nth-child(n){margin-top:0;}.product-card:nth-child(even){margin-top:3rem;}.cart-header,.cart-item,.cart-summary{padding-left:1.5rem;padding-right:1.5rem;}.detail-wrap{padding:2rem 1.2rem 4rem;}.detail-name{font-size:1.8rem;}}
+@media(max-width:768px){header{padding:0 1.2rem;}.header-nav{display:none;}.hero{height:72vw;min-height:320px;max-height:420px;}.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;}.slide-img-wrap{position:absolute;top:0;left:0;right:0;height:62%;opacity:1;}.slide-img-wrap img{object-position:center center;}.slide-overlay{background:linear-gradient(180deg,rgba(252,249,248,0) 0%,rgba(252,249,248,0.6) 45%,rgba(252,249,248,0.99) 70%);}.hero .slide-content{padding:0.8rem 1.5rem 2.2rem;position:relative;z-index:2;width:100%;}.slide-title{font-size:1.6rem;margin-bottom:0.4rem;line-height:1.1;}.slide-desc{display:none;}.slide-eyebrow{margin-bottom:0.3rem;font-size:0.58rem;}.slide-cta{padding:0.65rem 1.4rem;font-size:0.6rem;margin-bottom:0;}.hero-dots{display:none;}.cats-section,.products-section{padding:0 1.2rem;}.cats-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem;}.products-grid{grid-template-columns:repeat(2,1fr);gap:0 1rem;}.product-card:nth-child(n){margin-top:0;}.product-card:nth-child(even){margin-top:3rem;}.cart-header,.cart-item,.cart-summary{padding-left:1.5rem;padding-right:1.5rem;}.detail-wrap{padding:2rem 1.2rem 4rem;}.detail-name{font-size:1.8rem;}.hero-dots-mobile{display:flex;justify-content:center;gap:0.6rem;padding:0.8rem 0 0;background:var(--bg);}}
 @media(max-width:360px){.products-grid{grid-template-columns:1fr;}.product-card:nth-child(n){margin-top:0;}}
 </style>
 </head>
@@ -258,6 +259,7 @@ footer{background:var(--ink);padding:4rem 3rem;}
   <div id="heroSlider"><div class="slide active"><div class="slide-img-wrap"><div class="slide-img-placeholder"><span>SBN</span></div></div><div class="slide-overlay"></div><div class="slide-content"><div class="slide-eyebrow">Bienvenida</div><h1 class="slide-title">Joyas de<br><em>todos los dias</em></h1><p class="slide-desc">Cargando coleccion...</p></div></div></div>
   <div class="hero-dots" id="heroDots"></div>
 </div>
+<div class="hero-dots-mobile" id="heroDotsM"></div>
 <div class="cats-section"><div class="section-eyebrow">Explorar por categoria</div><div class="cats-grid" id="catsGrid"></div></div>
 <div id="producto" class="products-section"><div class="section-header"><span class="section-title">Coleccion</span><span class="sheet-notice"><span id="sheetStatus">cargando...</span></span></div><div class="filters" id="filters"></div><div class="products-grid" id="productsGrid"><div class="loading-state">Cargando productos...</div></div></div>
 </div>
@@ -506,9 +508,12 @@ function renderHero() {
       +'</div></div>';
   }).join('');
 
-  dotsEl.innerHTML = heroSlides.map((_,i) =>
+  const dotsHtml = heroSlides.map((_,i) =>
     '<button class="hero-dot'+(i===0?' active':'')+'" onclick="goSlide('+i+')"></button>'
   ).join('');
+  dotsEl.innerHTML = dotsHtml;
+  const dotsMobile = document.getElementById('heroDotsM');
+  if (dotsMobile) dotsMobile.innerHTML = dotsHtml;
 
   totalSlides = heroSlides.length;
 }
