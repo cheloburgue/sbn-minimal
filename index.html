@@ -73,6 +73,9 @@ header{position:sticky;top:0;z-index:100;background:rgba(252,249,248,0.88);backd
 .prod-no-img{aspect-ratio:4/5;background:var(--accent-lt);display:flex;align-items:center;justify-content:center;position:relative;}
 .prod-no-img span{font-family:'Manrope',sans-serif;font-weight:200;font-size:1rem;letter-spacing:0.1em;color:var(--accent);text-transform:uppercase;}
 .prod-badge{position:absolute;top:0.8rem;left:0.8rem;background:var(--accent);color:#fff;font-size:0.52rem;letter-spacing:0.12em;padding:0.25rem 0.6rem;text-transform:uppercase;z-index:2;}
+.prod-badge.sale{background:#c0392b;}
+.prod-badge.nuevo{background:#27ae60;}
+.prod-badge.sinstock{background:#888;color:#fff;}
 .prod-actions{position:absolute;inset:0;background:rgba(50,50,51,0.06);opacity:0;transition:opacity 0.3s;display:flex;align-items:flex-end;padding:1rem;gap:0.4rem;z-index:3;}
 .product-card:hover .prod-actions{opacity:1;}
 @media(hover:none){.prod-actions{opacity:1;background:rgba(50,50,51,0.04);}}
@@ -185,6 +188,16 @@ footer{background:var(--ink);padding:4rem 3rem;}
 .footer-tag{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
 .footer-line{width:24px;height:1px;background:var(--accent);margin:0.8rem 0;}
 .footer-copy{font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.22);}
+.confirm-modal{position:fixed;inset:0;background:rgba(50,50,51,0.5);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.confirm-modal.open{opacity:1;pointer-events:all;}
+.confirm-box{background:#fff;padding:2rem;width:min(360px,90vw);text-align:center;}
+.confirm-box h3{font-family:'Manrope',sans-serif;font-weight:300;font-size:1.3rem;color:var(--ink);margin-bottom:0.5rem;}
+.confirm-box p{font-size:0.75rem;color:var(--ink-mid);line-height:1.6;margin-bottom:1.5rem;}
+.confirm-box-btns{display:flex;gap:0.7rem;}
+.confirm-yes{flex:1;background:var(--wa);color:#fff;border:none;padding:0.8rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:opacity 0.2s;}
+.confirm-yes:hover{opacity:0.85;}
+.confirm-no{flex:1;background:none;color:var(--ink-mid);border:1px solid var(--border);padding:0.8rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.confirm-no:hover{border-color:var(--ink);color:var(--ink);}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(60px);background:var(--ink);color:#fff;padding:0.6rem 1.6rem;font-size:0.72rem;letter-spacing:0.06em;z-index:999;transition:transform 0.28s cubic-bezier(.4,0,.2,1);pointer-events:none;white-space:nowrap;border-left:3px solid var(--accent);}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
@@ -284,12 +297,22 @@ footer{background:var(--ink);padding:4rem 3rem;}
 </div></div>
 <div class="toast" id="toast"></div>
 <footer><div class="footer-inner"><div class="footer-brand">SBN</div><div class="footer-tag">joyas de todos los dias</div><div class="footer-line"></div><div class="footer-copy">pedidos por whatsapp &middot; Buenos Aires &middot; &copy; 2025</div><button class="admin-trigger" onclick="openAdminLogin()">&#9881;</button></div></footer>
+<div class="confirm-modal" id="confirmModal">
+  <div class="confirm-box">
+    <h3>¿Enviaste el pedido?</h3>
+    <p>Confirmá si enviaste el mensaje por WhatsApp para actualizar el stock y limpiar tu carrito.</p>
+    <div class="confirm-box-btns">
+      <button class="confirm-yes" onclick="confirmarPedido()">Sí, lo envié ✓</button>
+      <button class="confirm-no" onclick="cancelarConfirmacion()">No, volver</button>
+    </div>
+  </div>
+</div>
 <div class="admin-overlay" id="adminOverlay"><div class="admin-login"><h2>Panel Admin</h2><p>SBN &middot; Acceso restringido</p><input class="admin-pwd-input" type="password" id="adminPwdInput" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"><button class="admin-pwd-btn" onclick="submitAdminLogin()">Ingresar</button><div class="admin-login-msg" id="adminLoginMsg"></div><button class="admin-login-cancel" onclick="closeAdminLogin()">Cancelar</button></div></div>
 <div class="admin-panel" id="adminPanel">
 <div class="admin-topbar"><h1>SBN Admin</h1><div class="admin-topbar-right"><button class="admin-add-btn" onclick="addNewProduct()">+ Nuevo producto</button><button class="admin-sync-btn" onclick="loadAdminTable()">&#8635; Recargar</button><button class="admin-close-btn" onclick="closeAdmin()">&#215; Salir</button></div></div>
 <div class="admin-content"><div class="admin-info-bar">&#128161; Edita directamente en la tabla y apreta <strong>Guardar</strong>. Los cambios se publican al instante. La categoria se crea sola en la tienda cuando la escribis. El toggle oculta/muestra sin borrar.</div>
 <div id="adminStatusMsg"></div>
-<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nombre</th><th>Categoria</th><th>Color</th><th>Precio ARS</th><th>Stock</th><th>Estado</th><th>Link Imagen</th><th>Descripcion Web</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="adminTableBody"></tbody></table></div>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nombre</th><th>Categoria</th><th>Color</th><th>Precio ARS</th><th>Stock</th><th>Estado</th><th>Etiqueta</th><th>Link Imagen</th><th>Descripcion Web</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="adminTableBody"></tbody></table></div>
 </div></div>
 <script>
 
@@ -568,6 +591,14 @@ function filterCategory(cat) {
 }
 
 // &#9472;&#9472; RENDER PRODUCTS &#9472;&#9472;
+function getBadgeClass(etiqueta) {
+  if (!etiqueta) return '';
+  const e = etiqueta.toUpperCase();
+  if (e === 'SALE' || e === 'OFERTA' || e === 'DESCUENTO') return 'sale';
+  if (e === 'NUEVO' || e === 'NEW' || e === 'NOVEDAD') return 'nuevo';
+  if (e === 'SIN STOCK') return 'sinstock';
+  return '';
+}
 function renderProducts() {
   const list = activeFilter==='todos' ? products : products.filter(p => p.categoria===activeFilter);
   const grid = document.getElementById('productsGrid');
@@ -583,6 +614,7 @@ function renderProducts() {
     return '<div class="product-card" style="animation-delay:'+(idx*0.04)+'s" onclick="showDetail(\''+p.id_producto+'\')">'
       +'<div class="prod-img-wrap">'+imgHtml
       +(oos?'<div class="out-of-stock-overlay"><span class="out-of-stock-label">Sin stock</span></div>':'')
+      +(p.etiqueta&&!oos?'<span class="prod-badge '+getBadgeClass(p.etiqueta)+'">'+p.etiqueta+'</span>':'')
       +'<div class="prod-actions">'
       +'<button class="prod-quick-add'+(inCart?' added':'')+'" onclick="event.stopPropagation();'+(oos?'':('addToCart(\''+p.id_producto+'\')')) +'" '+(oos?'disabled':'')+'>'
       +(inCart?'&#10003; Agregado':oos?'Sin stock':'Agregar al carrito')+'</button>'
@@ -712,19 +744,27 @@ async function sendToWhatsApp() {
 
   const note = document.getElementById('cartNote').value.trim();
   const total = cart.reduce((s,c) => s+(Number(c.precio_venta)||0)*c.qty, 0);
-  let msg = 'Hola SBN! Quiero hacer este pedido:\n\n';
+  let msg = '\u00A1Hola! Me enamoré de algunos productos de SBN \uD83D\uDED2\n\nMi pedido:\n\n';
   cart.forEach(it => {
-    msg += '* Ref: '+it.id_producto+' - '+it.nombre_variante;
+    msg += '\u2022 Ref: '+it.id_producto+' - '+it.nombre_variante;
     if (it.color) msg += ' ('+it.color+')';
-    msg += ' x'+it.qty+' - $'+((Number(it.precio_venta)||0)*it.qty).toLocaleString('es-AR')+'\n';
+    msg += ' x'+it.qty+' \u2014 $'+((Number(it.precio_venta)||0)*it.qty).toLocaleString('es-AR')+'\n';
   });
-  msg += '\nTotal: $'+total.toLocaleString('es-AR')+' ARS';
+  msg += '\n*Total: $'+total.toLocaleString('es-AR')+' ARS*';
+  msg += '\n\n\u00BFMe podés confirmar disponibilidad y datos para transferir? \u00A1Gracias!';
   if (note) msg += '\n\nNota: '+note;
   const a = document.createElement('a');
   a.href = 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(msg);
   a.target = '_blank'; a.rel = 'noopener noreferrer';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
+
+  // Clear cart automatically after opening WhatsApp
+  cart = [];
+  saveCart(); renderProducts(); renderCart();
+  toggleCart();
+  showToast('¡Pedido enviado! Tu carrito fue limpiado.');
 }
+
 function toggleCart() {
   document.getElementById('cartOverlay').classList.toggle('open');
   document.getElementById('cartDrawer').classList.toggle('open');
@@ -800,13 +840,14 @@ function renderAdminTable(data) {
     const sl = sn===null?'Ilimitado':sn===0?'Sin stock':sn<=3?'Bajo ('+sn+')':'OK ('+sn+')';
     const isOn = p.activo !== false;
     return '<tr id="arow-'+p.id_producto+'">'
-      +'<td style="font-size:0.68rem;color:var(--ink-lt);white-space:nowrap;">'+escHtml(p.id_producto)+'</td>'
+      +'<td><input class="admin-input sm" value="'+escHtml(p.id_producto)+'" data-field="id_producto" data-original-id="'+escHtml(p.id_producto)+'" onchange="markChanged(this)" style="width:100px"></td>'
       +'<td><input class="admin-input" value="'+escHtml(p.nombre_variante)+'" data-field="nombre_variante" onchange="markChanged(this)"></td>'
       +'<td><input class="admin-input md" value="'+escHtml(p.categoria||'')+'" data-field="categoria" onchange="markChanged(this)" placeholder="Categoria..."></td>'
       +'<td><input class="admin-input md" value="'+escHtml(p.color||'')+'" data-field="color" onchange="markChanged(this)" placeholder="Color..."></td>'
       +'<td><input class="admin-input md" type="number" value="'+Number(p.precio_venta)+'" data-field="precio_venta" onchange="markChanged(this)"></td>'
       +'<td><input class="admin-input sm" type="number" value="'+(sn===null?'':sn)+'" data-field="stock_disponible" onchange="markChanged(this)" placeholder="inf"></td>'
       +'<td><span class="stock-badge '+sc+'">'+sl+'</span></td>'
+      +'<td><input class="admin-input md" value="'+escHtml(p.etiqueta||'')+'" data-field="etiqueta" onchange="markChanged(this)" placeholder="SALE / NUEVO…"></td>'
       +'<td><input class="admin-input" style="width:220px" value="'+escHtml(p.link_imagenes||'')+'" data-field="link_imagenes" onchange="markChanged(this)" placeholder="https://drive.google.com/uc?..."></td>'
       +'<td><input class="admin-input" style="width:180px" value="'+escHtml(p.descripcion_web||'')+'" data-field="descripcion_web" onchange="markChanged(this)" placeholder="Descripcion..."></td>'
       +'<td><button class="admin-toggle '+(isOn?'on':'')+'" onclick="toggleActivo(\''+p.id_producto+'\',this)" title="'+(isOn?'Visible':'Oculto')+'"></button></td>'
@@ -837,6 +878,9 @@ async function saveRow(id) {
   const btn = document.getElementById('save-'+id);
   btn.textContent = '...';
   const updates = {};
+  // Use original id for the query in case id_producto itself was changed
+  const idInput = row.querySelector('[data-field="id_producto"]');
+  const originalId = idInput ? (idInput.dataset.originalId || id) : id;
   row.querySelectorAll('[data-field]').forEach(el => {
     const f = el.dataset.field;
     let v = el.value;
@@ -845,9 +889,16 @@ async function saveRow(id) {
     updates[f] = v;
   });
   try {
-    await sbFetch('producto?id_producto=eq.'+encodeURIComponent(id), {
+    await sbFetch('producto?id_producto=eq.'+encodeURIComponent(originalId), {
       method: 'PATCH', body: JSON.stringify(updates), headers: {'Prefer':'return=minimal'}
     });
+    // Update row id and original-id if id_producto changed
+    if (idInput && idInput.value !== originalId) {
+      const newId = idInput.value;
+      row.id = 'arow-'+newId;
+      btn.id = 'save-'+newId;
+      idInput.dataset.originalId = newId;
+    }
     showAdminStatus('Guardado correctamente', 'ok');
     btn.textContent = 'Guardar'; btn.style.opacity='0.3'; btn.style.pointerEvents='none';
     products = await loadProducts();
@@ -891,7 +942,8 @@ async function addNewProduct() {
   const stock = prompt('Stock (numero, o Enter para ilimitado):');
   const desc = prompt('Descripcion Web (opcional):') || '';
   const link = prompt('Link imagen (opcional):') || '';
-  const row = { id_producto:id, nombre_variante:nombre, categoria:cat, color, precio_venta:precio,
+  const etiqueta = prompt('Etiqueta (SALE / NUEVO / o vacío):') || '';
+  const row = { id_producto:id, nombre_variante:nombre, categoria:cat, color, precio_venta:precio, etiqueta,
     stock_disponible: (stock===''||stock===null)?null:Number(stock),
     descripcion_web:desc, link_imagenes:link, activo:true };
   try {
