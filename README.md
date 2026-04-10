@@ -1,1 +1,1 @@
-# sbn-minimalist
+# sbn-minimal
