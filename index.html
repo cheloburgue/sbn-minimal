@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SBN</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("tKAlTZkUtszFTjeO6");</script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fcf9f8;--bg-low:#f6f3f2;--surface:#fff;--ink:#323233;--ink-mid:#5f5f5f;--ink-lt:#7b7b7a;--outline:#b2b2b1;--accent:#6a5c46;--accent-lt:#f4e0c3;--wa:#25D366;--border:rgba(178,178,177,0.25);}
@@ -828,6 +830,13 @@ async function sendToWhatsApp() {
   a.href = 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(msg);
   a.target = '_blank'; a.rel = 'noopener noreferrer';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
+
+  // Send email via EmailJS
+  emailjs.send('service_4dyfunc', 'template_nhwq4bq', {
+    name: 'Tienda SBN',
+    time: new Date().toLocaleString('es-AR'),
+    mensaje: msg
+  }).catch(e => console.warn('EmailJS error:', e));
 
   // Clear cart automatically after opening WhatsApp
   cart = [];
