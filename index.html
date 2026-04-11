@@ -347,7 +347,7 @@ footer{background:var(--ink);padding:4rem 3rem;}
   <button class="admin-search-clear" onclick="clearAdminSearch()" title="Limpiar">&#215;</button>
   <span class="admin-search-count" id="adminSearchCount"></span>
 </div>
-<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Color</th><th>Precio ARS</th><th>Stock</th><th>Estado</th><th>Etiqueta</th><th>Link Imagen</th><th>Descripción Web</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="adminTableBody"></tbody></table></div>
+<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Subtítulo Hero</th><th>Color</th><th>Precio ARS</th><th>Stock</th><th>Estado</th><th>Etiqueta</th><th>Link Imagen</th><th>Descripción Web</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="adminTableBody"></tbody></table></div>
 </div></div>
 
 <div class="csv-modal" id="csvModal">
@@ -581,7 +581,7 @@ function renderHero() {
       +'<div class="slide-overlay"></div>'
       +'<div class="slide-content">'
       +'<div class="slide-eyebrow">Colección</div>'
-      +'<h1 class="slide-title">'+p.categoria+'<br><em>para vos</em></h1>'
+      +'<h1 class="slide-title">'+p.categoria+'<br><em>'+(p.subtitulo||'para vos')+'</em></h1>'
       +'<p class="slide-desc">Descubrí nuestra selección de '+p.categoria.toLowerCase()+'.</p>'
       +'<button class="slide-cta" onclick="filterCategory(\''+p.categoria+'\');document.getElementById(\'producto\').scrollIntoView({behavior:\'smooth\'})">Ver '+p.categoria+'</button>'
       +'</div></div>';
@@ -924,6 +924,7 @@ function renderAdminTable(data) {
       +'<td><input class="admin-input sm" value="'+escHtml(p.id_producto)+'" data-field="id_producto" data-original-id="'+escHtml(p.id_producto)+'" onchange="markChanged(this)" style="width:100px"></td>'
       +'<td><input class="admin-input" value="'+escHtml(p.nombre_variante)+'" data-field="nombre_variante" onchange="markChanged(this)"></td>'
       +'<td><input class="admin-input md" value="'+escHtml(p.categoria||'')+'" data-field="categoria" onchange="markChanged(this)" placeholder="Categoría..."></td>'
+      +'<td><input class="admin-input" style="width:140px" value="'+escHtml(p.subtitulo||'')+'" data-field="subtitulo" onchange="markChanged(this)" placeholder="para vos..."></td>'
       +'<td><input class="admin-input md" value="'+escHtml(p.color||'')+'" data-field="color" onchange="markChanged(this)" placeholder="Color..."></td>'
       +'<td><input class="admin-input md" type="number" value="'+Number(p.precio_venta)+'" data-field="precio_venta" onchange="markChanged(this)"></td>'
       +'<td><input class="admin-input sm" type="number" value="'+(sn===null?'':sn)+'" data-field="stock_disponible" onchange="markChanged(this)" placeholder="inf"></td>'
@@ -1024,7 +1025,8 @@ async function addNewProduct() {
   const desc = prompt('Descripción Web (opcional):') || '';
   const link = prompt('Link imagen (opcional):') || '';
   const etiqueta = prompt('Etiqueta (SALE / NUEVO / o vacío):') || '';
-  const row = { id_producto:id, nombre_variante:nombre, categoria:cat, color, precio_venta:precio, etiqueta,
+  const subtitulo = prompt('Subtítulo hero (ej: para vos, te van a amar, etc.):') || '';
+  const row = { id_producto:id, nombre_variante:nombre, categoria:cat, color, precio_venta:precio, etiqueta, subtitulo,
     stock_disponible: (stock===''||stock===null)?null:Number(stock),
     descripcion_web:desc, link_imagenes:link, activo:true };
   try {
