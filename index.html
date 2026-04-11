@@ -341,7 +341,7 @@ footer{background:var(--ink);padding:4rem 3rem;}
 
 <div class="csv-modal" id="csvModal">
   <div class="csv-box">
-    <h2>Importar productos desde CSV</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;"><h2 style="margin:0">Importar productos desde CSV</h2><button onclick="closeCsvImport()" style="background:none;border:none;font-size:1.4rem;color:var(--ink-lt);cursor:pointer;padding:0;line-height:1;">&#215;</button></div>
     <p>El CSV debe tener estas columnas: <strong>id_producto, nombre_variante, categoria, color, precio_venta, stock_disponible, descripcion_web, link_imagenes, activo, stock_minimo, etiqueta</strong>.<br>
     Los productos con el mismo <strong>id_producto</strong> se actualizarán. Los nuevos se insertarán.</p>
     <div class="csv-drop" id="csvDrop" onclick="document.getElementById('csvFileInput').click()">
